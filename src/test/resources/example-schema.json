@@ -1,0 +1,14 @@
+{
+  "class":"TestClass",
+  "properties": {
+    "a": {
+      "type": "string"
+    },
+    "b": {
+      "type": "integer"
+    },
+    "c": {
+      "type": "boolean"
+    }
+  }
+}
