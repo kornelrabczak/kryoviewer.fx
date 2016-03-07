@@ -1,7 +1,7 @@
 package com.thecookiezen.kryoviewerfx;
 
 import com.airhacks.afterburner.injection.Injector;
-import com.thecookiezen.kryoviewerfx.test.TestView;
+import com.thecookiezen.kryoviewerfx.presentation.test.TestView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.light;
+package com.thecookiezen.kryoviewerfx.presentation.light;
 
 import com.airhacks.afterburner.views.FXMLView;
 

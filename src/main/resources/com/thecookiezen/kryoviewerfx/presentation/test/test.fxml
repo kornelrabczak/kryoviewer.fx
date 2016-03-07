@@ -9,7 +9,7 @@
 <AnchorPane id="AnchorPane" minHeight="180.0" prefHeight="293.0" prefWidth="578.0" styleClass="airpad"
             xmlns="http://javafx.com/javafx/null"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.thecookiezen.kryoviewerfx.test.TestPresenter">
+            fx:controller="com.thecookiezen.kryoviewerfx.presentation.test.TestPresenter">
     <children>
         <FlowPane fx:id="lightsBox" hgap="1.0" prefHeight="143.0" prefWidth="525.0" vgap="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>

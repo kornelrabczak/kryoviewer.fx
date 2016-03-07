@@ -1,7 +1,7 @@
-package com.thecookiezen.kryoviewerfx.test;
+package com.thecookiezen.kryoviewerfx.presentation.test;
 
-import com.thecookiezen.kryoviewerfx.Tower;
-import com.thecookiezen.kryoviewerfx.light.LightView;
+import com.thecookiezen.kryoviewerfx.presentation.Tower;
+import com.thecookiezen.kryoviewerfx.presentation.light.LightView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;

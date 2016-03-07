@@ -1,14 +1,15 @@
 {
-  "class":"TestClass",
+  "name":"TestClass",
+  "type":"object",
   "properties": {
     "a": {
-      "type": "string"
+      "type": "boolean"
     },
     "b": {
       "type": "integer"
     },
     "c": {
-      "type": "boolean"
+      "type": "string"
     }
   }
 }

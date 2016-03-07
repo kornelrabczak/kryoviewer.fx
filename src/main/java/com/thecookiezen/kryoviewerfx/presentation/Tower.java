@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx;
+package com.thecookiezen.kryoviewerfx.presentation;
 
 import javax.annotation.PostConstruct;
 
