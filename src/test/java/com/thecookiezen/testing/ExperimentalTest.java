@@ -3,13 +3,10 @@ package com.thecookiezen.testing;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ClassJsonSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.kryo.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
 import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.ClassGenerator;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -17,41 +14,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.util.Map;
+import java.util.List;
 
 public class ExperimentalTest {
 
     @Test
     public void test() throws IOException, IllegalAccessException {
-        Kryo kryo = new Kryo();
+        Kryo kryo = new KryoWrapper().getKryo();
 
         Output output = new Output(new FileOutputStream("file.bin"));
         TestClass testClass = new TestClass(false, 123, "qwe");
         kryo.writeObject(output, testClass);
         output.close();
 
-        ObjectMapper mapper = new ObjectMapper();
+        final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
 
-        final URL resource = this.getClass().getClassLoader().getResource("example-schema.json");
-
-        final ObjectSchema classJsonSchema = mapper.readValue(resource, ObjectSchema.class);
-
-        DynamicType.Builder<Object> subclass = new ByteBuddy().subclass(Object.class).name(classJsonSchema.name);
-
-        for (Map.Entry<String, ClassJsonSchema> entry : classJsonSchema.getProperties().entrySet()) {
-            subclass = subclass.defineField(entry.getKey(), entry.getValue().getType(), Visibility.PUBLIC);
-        }
-
-        final Class<?> loaded = subclass.make()
-                .load(getClass().getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
-                .getLoaded();
+        final ClassGenerator classGenerator = new ClassGenerator();
+        final Class<?> aClass = classGenerator.fromSchema(schemas.get(0));
 
         Input input = new Input(new FileInputStream("file.bin"));
-        final Object o = kryo.readObject(input, loaded);
+        final Object o = kryo.readObject(input, aClass);
         input.close();
 
-        Field[] fields = loaded.getDeclaredFields();
+        Field[] fields = aClass.getDeclaredFields();
         System.out.println(o);
         System.out.printf("%d fields:%n", fields.length);
         for (Field field : fields) {
