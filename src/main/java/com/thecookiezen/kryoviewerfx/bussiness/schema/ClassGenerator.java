@@ -7,11 +7,17 @@ import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ClassGenerator {
 
-    public Class<?> fromSchema(final ObjectSchema schema) {
+    public Map<String, Class<?>> loadClasses(final List<ObjectSchema> schemas) {
+        return schemas.stream().collect(Collectors.toMap(ClassJsonSchema::getName, this::fromSchema));
+    }
+
+    private Class<?> fromSchema(final ObjectSchema schema) {
         DynamicType.Builder<Object> subclass = new ByteBuddy().subclass(Object.class).name(schema.name);
 
         for (Map.Entry<String, ClassJsonSchema> entry : schema.getProperties().entrySet()) {

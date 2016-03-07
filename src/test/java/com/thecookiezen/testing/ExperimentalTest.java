@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 
 public class ExperimentalTest {
 
@@ -30,7 +31,8 @@ public class ExperimentalTest {
         final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
 
         final ClassGenerator classGenerator = new ClassGenerator();
-        final Class<?> aClass = classGenerator.fromSchema(schemas.get(0));
+        final Map<String, Class<?>> stringClassMap = classGenerator.loadClasses(schemas);
+        final Class<?> aClass = stringClassMap.entrySet().stream().findFirst().get().getValue();
 
         Input input = new Input(new FileInputStream("file.bin"));
         final Object o = kryo.readObject(input, aClass);
