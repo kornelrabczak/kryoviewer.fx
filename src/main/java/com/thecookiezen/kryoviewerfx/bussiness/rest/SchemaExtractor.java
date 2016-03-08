@@ -1,16 +1,11 @@
 package com.thecookiezen.kryoviewerfx.bussiness.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
-import lombok.extern.log4j.Log4j;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.List;
 
-@Log4j
 public class SchemaExtractor {
     private final ObjectMapper mapper;
 
@@ -18,14 +13,12 @@ public class SchemaExtractor {
         this.mapper = new ObjectMapper();
     }
 
-    public List<ObjectSchema> getSchemas() {
-        final URL resource = this.getClass().getClassLoader().getResource("example-schema.json");
+    public ObjectSchema apply(File resource) {
         try {
-            final ObjectSchema classJsonSchema = mapper.readValue(resource, ObjectSchema.class);
-            return Lists.newArrayList(classJsonSchema);
+            return mapper.readValue(resource, ObjectSchema.class);
         } catch (IOException e) {
-            log.error("JSON schema deserialization failed for file " + resource, e);
+            System.out.println("JSON schema deserialization failed for file " + resource + e);
+            throw new RuntimeException("JSON schema deserialization failed");
         }
-        return Collections.emptyList();
     }
 }

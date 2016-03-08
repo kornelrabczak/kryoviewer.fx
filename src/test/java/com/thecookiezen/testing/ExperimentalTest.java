@@ -21,28 +21,28 @@ public class ExperimentalTest {
 
     @Test
     public void test() throws IOException, IllegalAccessException {
-        Kryo kryo = new KryoWrapper().getKryo();
-
-        Output output = new Output(new FileOutputStream("file.bin"));
-        TestClass testClass = new TestClass(false, 123, "qwe");
-        kryo.writeObject(output, testClass);
-        output.close();
-
-        final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
-
-        final ClassGenerator classGenerator = new ClassGenerator();
-        final Map<String, Class<?>> stringClassMap = classGenerator.loadClasses(schemas);
-        final Class<?> aClass = stringClassMap.entrySet().stream().findFirst().get().getValue();
-
-        Input input = new Input(new FileInputStream("file.bin"));
-        final Object o = kryo.readObject(input, aClass);
-        input.close();
-
-        Field[] fields = aClass.getDeclaredFields();
-        System.out.println(o);
-        System.out.printf("%d fields:%n", fields.length);
-        for (Field field : fields) {
-            System.out.printf("%s %s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName(), field.get(o));
-        }
+//        Kryo kryo = new KryoWrapper().getKryo();
+//
+//        Output output = new Output(new FileOutputStream("file.bin"));
+//        TestClass testClass = new TestClass(false, 123, "qwe");
+//        kryo.writeObject(output, testClass);
+//        output.close();
+//
+//        final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
+//
+//        final ClassGenerator classGenerator = new ClassGenerator();
+//        final Map<String, Class<?>> stringClassMap = classGenerator.loadClasses(schemas);
+//        final Class<?> aClass = stringClassMap.entrySet().stream().findFirst().get().getValue();
+//
+//        Input input = new Input(new FileInputStream("file.bin"));
+//        final Object o = kryo.readObject(input, aClass);
+//        input.close();
+//
+//        Field[] fields = aClass.getDeclaredFields();
+//        System.out.println(o);
+//        System.out.printf("%d fields:%n", fields.length);
+//        for (Field field : fields) {
+//            System.out.printf("%s %s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName(), field.get(o));
+//        }
     }
 }
