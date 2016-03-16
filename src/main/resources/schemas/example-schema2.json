@@ -1,0 +1,24 @@
+{
+  "name":"TestClass2",
+  "type":"object",
+  "properties": {
+    "a": {
+      "type": "boolean"
+    },
+    "b": {
+      "type": "integer"
+    },
+    "c": {
+      "type": "string"
+    },
+    "h": {
+      "type": "boolean"
+    },
+    "g": {
+      "type": "integer"
+    },
+    "f": {
+      "type": "string"
+    }
+  }
+}

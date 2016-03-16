@@ -30,10 +30,8 @@ public class App extends Application {
         System.setProperty("happyEnding", " Enjoy the flight!");
         TestView appView = new TestView();
         Scene scene = new Scene(appView.getView());
-        stage.setTitle("followme.fx");
-        final String uri = getClass().getClassLoader().getResource("app.css").toExternalForm();
-        System.out.println(uri);
-        scene.getStylesheets().add(uri);
+        stage.setTitle("KryoViewerFX");
+        scene.getStylesheets().add(getClass().getClassLoader().getResource("app.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

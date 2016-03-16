@@ -24,4 +24,8 @@ public abstract class ClassJsonSchema {
     public abstract Class<?> getType();
 
     public abstract String getTypeString();
+
+    public String getName() {
+        return name;
+    }
 }

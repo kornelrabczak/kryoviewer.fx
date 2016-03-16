@@ -1,17 +1,17 @@
 package com.thecookiezen.kryoviewerfx.presentation.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.ClassGenerator;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
-import com.thecookiezen.kryoviewerfx.presentation.Tower;
-import com.thecookiezen.kryoviewerfx.presentation.light.LightView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 
 import javax.inject.Inject;
@@ -29,10 +29,10 @@ public class TestPresenter implements Initializable {
     Pane lightsBox;
 
     @FXML
-    private ListView<String> schemas;
+    TextArea schemaView;
 
-    @Inject
-    Tower tower;
+    @FXML
+    private ListView<String> schemas;
 
     @Inject
     private LocalDate date;
@@ -48,6 +48,10 @@ public class TestPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.theVeryEnd = resources.getString("theEnd");
+
+        schemaView.setEditable(false);
+        schemaView.setWrapText(true);
+
         registerSchemas();
     }
 
@@ -57,19 +61,21 @@ public class TestPresenter implements Initializable {
         schemas.setItems(FXCollections.observableArrayList(schemasMap.keySet()));
 
         schemas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Selected item: " + newValue);
+            schemaView.setText(getPrettyPrint(schemasMap, newValue));
         });
     }
 
-    public void createLights() {
-        for (int i = 0; i < 255; i++) {
-            final int red = i;
-            LightView view = new LightView((f) -> red);
-            view.getViewAsync(lightsBox.getChildren()::add);
+    private String getPrettyPrint(Map<String, Class<?>> schemasMap, String newValue) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonSchema jsonSchema = objectMapper.generateJsonSchema(schemasMap.get(newValue));
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema);
+        } catch (JsonProcessingException e) {
+            return "{}";
         }
     }
 
     public void launch() {
-        message.setText("Date: " + date + " -> " + prefix + tower.readyToTakeoff() + happyEnding + theVeryEnd);
+        message.setText("Date: " + date + " -> " + prefix + happyEnding + theVeryEnd);
     }
 }
