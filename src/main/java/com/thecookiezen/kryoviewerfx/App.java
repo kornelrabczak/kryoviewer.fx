@@ -1,7 +1,7 @@
 package com.thecookiezen.kryoviewerfx;
 
 import com.airhacks.afterburner.injection.Injector;
-import com.thecookiezen.kryoviewerfx.presentation.test.TestView;
+import com.thecookiezen.kryoviewerfx.presentation.viewer.ViewerView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,7 +28,7 @@ public class App extends Application {
         Injector.setConfigurationSource(customProperties::get);
 
         System.setProperty("happyEnding", " Enjoy the flight!");
-        TestView appView = new TestView();
+        ViewerView appView = new ViewerView();
         Scene scene = new Scene(appView.getView());
         stage.setTitle("KryoViewerFX");
         scene.getStylesheets().add(getClass().getClassLoader().getResource("app.css").toExternalForm());

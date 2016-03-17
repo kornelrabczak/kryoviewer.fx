@@ -18,7 +18,7 @@ public class Schemas {
     private final Map<String, Class<?>> schemas;
 
     Supplier<Collection<File>> findFiles = () -> {
-        File directory = new File("./classes/schemas");
+        File directory = new File("./target/classes/schemas");
         return listFiles(directory, new String[]{"json"}, true);
     };
 
