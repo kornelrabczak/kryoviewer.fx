@@ -5,11 +5,7 @@ import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.BooleanSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ClassJsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.IntegerSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.StringSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.rest.types.*;
 
 import java.util.Arrays;
 
@@ -38,8 +34,8 @@ public class JsonSchemaIdResolver extends TypeIdResolverBase {
         JsonFormatTypes stdType = JsonFormatTypes.forValue(id);
         if (stdType != null) {
             switch (stdType) {
-//                case ARRAY:
-//                    return ctxt.constructType(ArraySchema.class);
+                case ARRAY:
+                    return ctxt.constructType(ArraySchema.class);
                 case BOOLEAN:
                     return ctxt.constructType(BooleanSchema.class);
                 case INTEGER:

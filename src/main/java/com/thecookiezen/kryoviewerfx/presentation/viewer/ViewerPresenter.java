@@ -1,7 +1,5 @@
 package com.thecookiezen.kryoviewerfx.presentation.viewer;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
@@ -9,18 +7,20 @@ import com.thecookiezen.kryoviewerfx.bussiness.kryo.KryoWrapper;
 import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.ClassGenerator;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("unchecked")
 public class ViewerPresenter implements Initializable {
 
     @FXML
@@ -48,6 +49,8 @@ public class ViewerPresenter implements Initializable {
 
     private Map<String, Class<?>> schemasMap;
 
+    private KryoWrapper kryoWrapper = new KryoWrapper();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         schemaView.setEditable(false);
@@ -63,19 +66,36 @@ public class ViewerPresenter implements Initializable {
 
         schemas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             schemaView.setText(getPrettyPrint(newValue));
-
-
-            Class<?> clazz = schemasMap.get(newValue);
-            Field[] fields = clazz.getDeclaredFields();
-            List<TableColumn> tables = new ArrayList<>();
-            for (Field field : fields) {
-                System.out.printf("%s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName());
-                TableColumn column = new TableColumn(field.getName());
-                column.setCellValueFactory(new PropertyValueFactory(field.getName()));
-                tables.add(column);
-            }
-            objectsTable.getColumns().setAll(tables);
+            objectsTable.getColumns().setAll(getTableColumns(newValue));
+            objectsTable.setItems(FXCollections.emptyObservableList());
         });
+    }
+
+    private List<TableColumn> getTableColumns(String schemaName) {
+        Class<?> clazz = schemasMap.get(schemaName);
+        Field[] fields = clazz.getDeclaredFields();
+        List<TableColumn> tables = new ArrayList<>();
+        for (Field field : fields) {
+            logField(field);
+            TableColumn column = new TableColumn(field.getName());
+            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
+                @Override
+                public ObservableValue call(TableColumn.CellDataFeatures param) {
+                    try {
+                        return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            });
+            tables.add(column);
+        }
+        return tables;
+    }
+
+    private PrintStream logField(Field field) {
+        return System.out.printf("%s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName());
     }
 
     private String getPrettyPrint(String newValue) {
@@ -98,21 +118,15 @@ public class ViewerPresenter implements Initializable {
             String className = schemas.getSelectionModel().getSelectedItem();
             Class<?> clazz = schemasMap.get(className);
 
-            Input input = new Input(new FileInputStream(selectedFile));
-            Kryo kryo = new KryoWrapper().getKryo();
-            final Object o = kryo.readObject(input, clazz);
-            input.close();
-
             Field[] fields = clazz.getDeclaredFields();
-            System.out.println(o);
             System.out.printf("%d fields:%n", fields.length);
+            final Object o = kryoWrapper.deserializeFromFile(selectedFile, clazz);
             for (Field field : fields) {
                 System.out.printf("%s %s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName(), field.get(o));
             }
 
             final ObservableList data = FXCollections.observableArrayList(o);
             objectsTable.setItems(data);
-
         }
     }
 }

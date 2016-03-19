@@ -28,4 +28,8 @@ public abstract class ClassJsonSchema {
     public String getName() {
         return name;
     }
+
+    public boolean isArray() {
+        return false;
+    }
 }
