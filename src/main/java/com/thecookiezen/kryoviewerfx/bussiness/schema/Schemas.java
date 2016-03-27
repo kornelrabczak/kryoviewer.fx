@@ -2,6 +2,7 @@ package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
 import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
 import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ClassJsonSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class Schemas {
                 .peek(System.out::println)
                 .map(this::loadJsonFromFile)
                 .map(extractor::apply)
-                .collect(Collectors.toMap(ClassJsonSchema::getName, classGenerator::fromSchema));
+                .collect(Collectors.toMap(ObjectSchema::getName, classGenerator::fromSchema));
     }
 
     private String loadJsonFromFile(File file) {

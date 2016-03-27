@@ -13,8 +13,15 @@ public class ObjectSchema extends ClassJsonSchema {
     @JsonProperty
     public Map<String, ClassJsonSchema> properties = new LinkedHashMap<>();
 
-    protected ObjectSchema() {
+    @JsonProperty
+    public String name;
+
+    public ObjectSchema() {
         properties = new LinkedHashMap<>();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Map<String, ClassJsonSchema> getProperties() {

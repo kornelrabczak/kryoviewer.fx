@@ -16,18 +16,11 @@ import lombok.ToString;
 public abstract class ClassJsonSchema {
 
     @JsonProperty
-    public String name;
-
-    @JsonProperty
     public String type;
 
     public abstract Class<?> getType();
 
     public abstract String getTypeString();
-
-    public String getName() {
-        return name;
-    }
 
     public boolean isArray() {
         return false;
