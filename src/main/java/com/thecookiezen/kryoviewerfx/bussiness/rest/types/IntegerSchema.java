@@ -2,7 +2,7 @@ package com.thecookiezen.kryoviewerfx.bussiness.rest.types;
 
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
-public class IntegerSchema extends ClassJsonSchema {
+public class IntegerSchema extends PrimitiveSchema {
 
     @Override
     public Class<Integer> getType() {

@@ -2,7 +2,7 @@ package com.thecookiezen.kryoviewerfx.bussiness.rest.types;
 
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
-public class BooleanSchema extends ClassJsonSchema {
+public class BooleanSchema extends PrimitiveSchema {
 
     @Override
     public Class<Boolean> getType() {

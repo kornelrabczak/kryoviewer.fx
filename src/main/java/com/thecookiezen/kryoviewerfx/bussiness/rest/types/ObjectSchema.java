@@ -37,4 +37,9 @@ public class ObjectSchema extends ClassJsonSchema {
     public String getTypeString() {
         return JsonFormatTypes.OBJECT.value();
     }
+
+    @Override
+    public boolean isPrimitive() {
+        return false;
+    }
 }

@@ -56,7 +56,6 @@ public class ExperimentalTest {
         output.close();
 
         ArraySchema schema = new ArraySchema();
-        schema.name = "testing";
         schema.type = "array";
         Class<?> aClass = new ClassGenerator().fromSchema(schema);
 

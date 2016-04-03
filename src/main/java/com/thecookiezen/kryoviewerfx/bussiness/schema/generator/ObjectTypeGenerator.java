@@ -16,11 +16,12 @@ public class ObjectTypeGenerator implements TypeGenerator<ObjectSchema> {
         DynamicType.Builder<Object> subclass = new ByteBuddy().subclass(Object.class).name(schema.name);
 
         for (Map.Entry<String, ClassJsonSchema> entry : schema.getProperties().entrySet()) {
-            if (entry.getValue() instanceof ObjectSchema) {
-                Class<?> generate = generate((ObjectSchema) entry.getValue());
+            ClassJsonSchema value = entry.getValue();
+            if (!value.isArray() && !value.isPrimitive()) {
+                Class<?> generate = generate((ObjectSchema) value);
                 subclass =  subclass.defineField(entry.getKey(), generate, Visibility.PUBLIC);
             } else {
-                subclass = subclass.defineField(entry.getKey(), entry.getValue().getType(), Visibility.PUBLIC);
+                subclass = subclass.defineField(entry.getKey(), value.getType(), Visibility.PUBLIC);
             }
         }
 

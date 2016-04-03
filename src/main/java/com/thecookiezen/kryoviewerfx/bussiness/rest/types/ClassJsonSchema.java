@@ -25,4 +25,6 @@ public abstract class ClassJsonSchema {
     public boolean isArray() {
         return false;
     }
+
+    public abstract boolean isPrimitive();
 }
