@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.bussiness.kryo;
+package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -12,13 +12,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class KryoWrapper {
-    private ThreadLocal<Kryo> kryos = new ThreadLocal<Kryo>() {
+    private final ThreadLocal<Kryo> kryos = new ThreadLocal<Kryo>() {
         protected Kryo initialValue() {
             return pool.borrow();
         }
     };
 
-    KryoFactory factory = () -> {
+    private final KryoFactory factory = () -> {
         final Kryo kryo = new Kryo();
         kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
         kryo.register(java.lang.invoke.SerializedLambda.class);

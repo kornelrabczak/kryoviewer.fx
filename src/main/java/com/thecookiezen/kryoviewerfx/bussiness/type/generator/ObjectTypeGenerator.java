@@ -1,7 +1,7 @@
-package com.thecookiezen.kryoviewerfx.bussiness.schema.generator;
+package com.thecookiezen.kryoviewerfx.bussiness.type.generator;
 
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ClassJsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ClassJsonSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;

@@ -1,8 +1,7 @@
 package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
-import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ClassJsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.type.TypeGeneratorFactory;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -18,17 +17,17 @@ import static org.apache.commons.io.FileUtils.listFiles;
 public class Schemas {
     private final Map<String, Class<?>> schemas;
 
-    Supplier<Collection<File>> findFiles = () -> {
+    private final Supplier<Collection<File>> findFiles = () -> {
         File directory = new File("./target/classes/schemas");
         return listFiles(directory, new String[]{"json"}, true);
     };
 
-    public Schemas(SchemaExtractor extractor, ClassGenerator classGenerator) {
+    public Schemas(SchemaExtractor extractor, TypeGeneratorFactory typeGeneratorFactory) {
         schemas = findFiles.get().stream()
                 .peek(System.out::println)
                 .map(this::loadJsonFromFile)
                 .map(extractor::apply)
-                .collect(Collectors.toMap(ObjectSchema::getName, classGenerator::fromSchema));
+                .collect(Collectors.toMap(ObjectSchema::getName, typeGeneratorFactory::fromSchema));
     }
 
     private String loadJsonFromFile(File file) {

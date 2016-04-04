@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.bussiness.rest.types;
+package com.thecookiezen.kryoviewerfx.bussiness.schema.types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;

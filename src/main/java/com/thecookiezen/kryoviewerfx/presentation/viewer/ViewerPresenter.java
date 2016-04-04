@@ -3,9 +3,9 @@ package com.thecookiezen.kryoviewerfx.presentation.viewer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.kryo.KryoWrapper;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.ClassGenerator;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaExtractor;
+import com.thecookiezen.kryoviewerfx.bussiness.type.TypeGeneratorFactory;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -49,7 +49,7 @@ public class ViewerPresenter implements Initializable {
 
     private Map<String, Class<?>> schemasMap;
 
-    private KryoWrapper kryoWrapper = new KryoWrapper();
+    private final KryoWrapper kryoWrapper = new KryoWrapper();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,7 +60,7 @@ public class ViewerPresenter implements Initializable {
     }
 
     private void registerSchemas() {
-        schemasMap = new Schemas(new SchemaExtractor(), new ClassGenerator()).getSchemas();
+        schemasMap = new Schemas(new SchemaExtractor(), new TypeGeneratorFactory()).getSchemas();
 
         schemas.setItems(FXCollections.observableArrayList(schemasMap.keySet()));
 
@@ -78,16 +78,13 @@ public class ViewerPresenter implements Initializable {
         for (Field field : fields) {
             logField(field);
             TableColumn column = new TableColumn(field.getName());
-            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
-                @Override
-                public ObservableValue call(TableColumn.CellDataFeatures param) {
-                    try {
-                        return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
+            column.setCellValueFactory(param -> {
+                try {
+                    return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
+                return null;
             });
             tables.add(column);
         }

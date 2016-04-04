@@ -4,11 +4,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.google.common.collect.Lists;
-import com.thecookiezen.kryoviewerfx.bussiness.kryo.KryoWrapper;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.SchemaExtractor;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ArraySchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.ClassGenerator;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ArraySchema;
+import com.thecookiezen.kryoviewerfx.bussiness.type.TypeGeneratorFactory;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -16,8 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Map;
 
 public class ExperimentalTest {
 
@@ -32,7 +28,7 @@ public class ExperimentalTest {
 //
 //        final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
 //
-//        final ClassGenerator classGenerator = new ClassGenerator();
+//        final TypeGeneratorFactory classGenerator = new TypeGeneratorFactory();
 //        final Map<String, Class<?>> stringClassMap = classGenerator.loadClasses(schemas);
 //        final Class<?> aClass = stringClassMap.entrySet().stream().findFirst().get().getValue();
 //
@@ -57,7 +53,7 @@ public class ExperimentalTest {
 
         ArraySchema schema = new ArraySchema();
         schema.type = "array";
-        Class<?> aClass = new ClassGenerator().fromSchema(schema);
+        Class<?> aClass = new TypeGeneratorFactory().fromSchema(schema).getClass();
 
         Input input = new Input(new FileInputStream("file.bin"));
         Object o = kryo.readObject(input, aClass);

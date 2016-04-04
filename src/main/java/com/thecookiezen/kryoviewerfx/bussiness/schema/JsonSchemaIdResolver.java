@@ -1,11 +1,11 @@
-package com.thecookiezen.kryoviewerfx.bussiness.rest;
+package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.*;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.*;
 
 import java.util.Arrays;
 

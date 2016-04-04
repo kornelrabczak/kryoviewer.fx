@@ -1,10 +1,10 @@
-package com.thecookiezen.kryoviewerfx.bussiness.schema.generator;
+package com.thecookiezen.kryoviewerfx.bussiness.type.generator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.StringSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.StringSchema;
 import org.junit.Test;
 
 import java.io.IOException;

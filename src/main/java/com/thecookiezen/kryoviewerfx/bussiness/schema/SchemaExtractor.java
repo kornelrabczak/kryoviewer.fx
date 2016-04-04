@@ -1,7 +1,7 @@
-package com.thecookiezen.kryoviewerfx.bussiness.rest;
+package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thecookiezen.kryoviewerfx.bussiness.rest.types.ObjectSchema;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
 
 import java.io.IOException;
 

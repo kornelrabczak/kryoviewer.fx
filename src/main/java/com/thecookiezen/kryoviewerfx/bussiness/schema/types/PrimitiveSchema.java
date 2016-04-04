@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.bussiness.rest.types;
+package com.thecookiezen.kryoviewerfx.bussiness.schema.types;
 
 public abstract class PrimitiveSchema extends ClassJsonSchema {
     @Override
