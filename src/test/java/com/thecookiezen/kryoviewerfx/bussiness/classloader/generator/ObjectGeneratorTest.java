@@ -1,5 +1,7 @@
-package com.thecookiezen.kryoviewerfx.bussiness.type.generator;
+package com.thecookiezen.kryoviewerfx.bussiness.classloader.generator;
 
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.loader.Loadable;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.loader.ObjectLoader;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.BooleanSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.IntegerSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
@@ -14,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ObjectGeneratorTest {
 
-    TypeGenerator<ObjectSchema> sut = new ObjectTypeGenerator();
+    Loadable<ObjectSchema> sut = new ObjectLoader();
 
     @Test
     public void shouldGenerateSimpleType() {
@@ -26,7 +28,7 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_a", new BooleanSchema());
 
         // when
-        Class<?> generate = sut.generate(schema);
+        Class<?> generate = sut.loadFromSchema(schema);
 
         // then
         Field[] fields = generate.getDeclaredFields();
@@ -38,7 +40,7 @@ public class ObjectGeneratorTest {
     public void shouldGenerateSimpleTypeWithBooleanIntegerAndStringFields() {
         // given
         ObjectSchema schema = new ObjectSchema();
-        schema.name = "TestClass";
+        schema.name = "TestClass2";
         schema.type = "object";
 
         schema.properties.put("field_a", new BooleanSchema());
@@ -46,7 +48,7 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_c", new StringSchema());
 
         // when
-        Class<?> generate = sut.generate(schema);
+        Class<?> generate = sut.loadFromSchema(schema);
 
         // then
         Field[] fields = generate.getDeclaredFields();
@@ -60,11 +62,11 @@ public class ObjectGeneratorTest {
     public void shouldGenerateComplexTypeWithObjectBooleanIntegerAndStringFields() {
         // given
         ObjectSchema schema = new ObjectSchema();
-        schema.name = "TestClass";
+        schema.name = "TestClass3";
         schema.type = "object";
 
         ObjectSchema schema2 = new ObjectSchema();
-        schema2.name = "TestClass2";
+        schema2.name = "TestClass4";
         schema2.type = "object";
 
         schema2.properties.put("field_a", new BooleanSchema());
@@ -74,7 +76,7 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_x", schema2);
 
         // when
-        Class<?> generate = sut.generate(schema);
+        Class<?> generate = sut.loadFromSchema(schema);
 
         // then
         Field[] fields = generate.getDeclaredFields();

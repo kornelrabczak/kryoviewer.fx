@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaExtractor;
-import com.thecookiezen.kryoviewerfx.bussiness.type.TypeGeneratorFactory;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaDeserializer;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -24,10 +24,10 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Supplier;
+
+import static org.apache.commons.io.FileUtils.listFiles;
 
 @SuppressWarnings("unchecked")
 public class ViewerPresenter implements Initializable {
@@ -51,6 +51,11 @@ public class ViewerPresenter implements Initializable {
 
     private final KryoWrapper kryoWrapper = new KryoWrapper();
 
+    private final Supplier<Collection<File>> findFiles = () -> {
+        File directory = new File("./target/classes/schemas");
+        return listFiles(directory, new String[]{"json"}, true);
+    };
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         schemaView.setEditable(false);
@@ -60,7 +65,7 @@ public class ViewerPresenter implements Initializable {
     }
 
     private void registerSchemas() {
-        schemasMap = new Schemas(new SchemaExtractor(), new TypeGeneratorFactory()).getSchemas();
+        schemasMap = new Schemas(new SchemaDeserializer(), new ClassLoaderFactory(), findFiles).getSchemaName2ClassMap();
 
         schemas.setItems(FXCollections.observableArrayList(schemasMap.keySet()));
 
@@ -78,13 +83,16 @@ public class ViewerPresenter implements Initializable {
         for (Field field : fields) {
             logField(field);
             TableColumn column = new TableColumn(field.getName());
-            column.setCellValueFactory(param -> {
-                try {
-                    return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
+                @Override
+                public ObservableValue call(TableColumn.CellDataFeatures param) {
+                    try {
+                        return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-                return null;
             });
             tables.add(column);
         }

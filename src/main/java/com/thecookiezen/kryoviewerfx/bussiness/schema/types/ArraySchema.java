@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 import java.util.LinkedList;
 
-public class ArraySchema extends ClassJsonSchema {
+public class ArraySchema extends RootSchema {
 
     @JsonProperty
     private ClassJsonSchema itemsSchema;
@@ -25,12 +25,11 @@ public class ArraySchema extends ClassJsonSchema {
         return true;
     }
 
-    @Override
-    public boolean isPrimitive() {
-        return false;
-    }
-
     public ClassJsonSchema getItemsSchema() {
         return itemsSchema;
+    }
+
+    public void setItemsSchema(ClassJsonSchema itemsSchema) {
+        this.itemsSchema = itemsSchema;
     }
 }

@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.bussiness.type.generator;
+package com.thecookiezen.kryoviewerfx.bussiness.classloader.loader;
 
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ClassJsonSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
@@ -9,16 +9,16 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 
 import java.util.Map;
 
-public class ObjectTypeGenerator implements TypeGenerator<ObjectSchema> {
+public class ObjectLoader implements Loadable<ObjectSchema> {
 
     @Override
-    public Class<?> generate(ObjectSchema schema) {
+    public Class<?> loadFromSchema(ObjectSchema schema) {
         DynamicType.Builder<Object> subclass = new ByteBuddy().subclass(Object.class).name(schema.name);
 
         for (Map.Entry<String, ClassJsonSchema> entry : schema.getProperties().entrySet()) {
             ClassJsonSchema value = entry.getValue();
             if (!value.isArray() && !value.isPrimitive()) {
-                Class<?> generate = generate((ObjectSchema) value);
+                Class<?> generate = loadFromSchema((ObjectSchema) value);
                 subclass =  subclass.defineField(entry.getKey(), generate, Visibility.PUBLIC);
             } else {
                 subclass = subclass.defineField(entry.getKey(), value.getType(), Visibility.PUBLIC);

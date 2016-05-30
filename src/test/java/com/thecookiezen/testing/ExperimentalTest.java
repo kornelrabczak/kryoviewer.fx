@@ -4,10 +4,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.google.common.collect.Lists;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ArraySchema;
-import com.thecookiezen.kryoviewerfx.bussiness.type.TypeGeneratorFactory;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,7 +16,7 @@ import java.lang.reflect.Modifier;
 
 public class ExperimentalTest {
 
-    @Test
+//    @Test
     public void test() throws IOException, IllegalAccessException {
 //        Kryo kryo = new KryoWrapper().getKryo();
 //
@@ -26,9 +25,9 @@ public class ExperimentalTest {
 //        kryo.writeObject(output, testClass);
 //        output.close();
 //
-//        final List<ObjectSchema> schemas = new SchemaExtractor().getSchemas();
+//        final List<ObjectSchema> schemas = new SchemaDeserializer().getSchemaName2ClassMap();
 //
-//        final TypeGeneratorFactory classGenerator = new TypeGeneratorFactory();
+//        final ClassLoaderFactory classGenerator = new ClassLoaderFactory();
 //        final Map<String, Class<?>> stringClassMap = classGenerator.loadClasses(schemas);
 //        final Class<?> aClass = stringClassMap.entrySet().stream().findFirst().get().getValue();
 //
@@ -53,7 +52,7 @@ public class ExperimentalTest {
 
         ArraySchema schema = new ArraySchema();
         schema.type = "array";
-        Class<?> aClass = new TypeGeneratorFactory().fromSchema(schema).getClass();
+        Class<?> aClass = new ClassLoaderFactory().fromSchema(schema).getClass();
 
         Input input = new Input(new FileInputStream("file.bin"));
         Object o = kryo.readObject(input, aClass);

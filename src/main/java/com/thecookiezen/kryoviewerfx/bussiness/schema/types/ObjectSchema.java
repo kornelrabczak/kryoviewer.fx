@@ -8,20 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ToString
-public class ObjectSchema extends ClassJsonSchema {
+public class ObjectSchema extends RootSchema {
 
     @JsonProperty
     public Map<String, ClassJsonSchema> properties = new LinkedHashMap<>();
 
-    @JsonProperty
-    public String name;
-
     public ObjectSchema() {
         properties = new LinkedHashMap<>();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Map<String, ClassJsonSchema> getProperties() {

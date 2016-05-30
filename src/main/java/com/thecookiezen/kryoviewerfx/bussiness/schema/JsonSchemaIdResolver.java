@@ -53,7 +53,7 @@ public class JsonSchemaIdResolver extends TypeIdResolverBase {
 //                    return ctxt.constructType(AnySchema.class);
             }
         }
-        // Not a standard type; should use a custom sub-type impl
+
         throw new IllegalArgumentException("Can not resolve JsonSchema 'type' id of \""+ id
                 +"\", not recognized as one of standard values: "+ Arrays.asList(JsonFormatTypes.values()));
     }
