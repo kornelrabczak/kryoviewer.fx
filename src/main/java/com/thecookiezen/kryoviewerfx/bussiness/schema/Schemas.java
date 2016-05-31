@@ -8,19 +8,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class Schemas {
-    private final Map<String, Class<?>> schemaName2ClassMap;
+    private final Map<String, Class<?>> schemaName2ClassMap = new HashMap<>();
 
     public Schemas(SchemaDeserializer extractor, ClassLoaderFactory classLoaderFactory, Supplier<Collection<File>> findFiles) {
-        schemaName2ClassMap = findFiles.get().stream()
-                .peek(System.out::println)
-                .map(this::loadJsonFromFile)
-                .map(extractor::apply)
-                .collect(Collectors.toMap(RootSchema::getName, classLoaderFactory::fromSchema));
+        findFiles.get().forEach(f -> {
+            System.out.println(f);
+            String json = loadJsonFromFile(f);
+            RootSchema schema = extractor.apply(json);
+            int pos = f.getName().lastIndexOf('.');
+            String fileName = pos > 0 ? f.getName().substring(0, pos) : f.getName();
+            schemaName2ClassMap.put(fileName, classLoaderFactory.fromSchema(schema));
+        });
     }
 
     private String loadJsonFromFile(File file) {

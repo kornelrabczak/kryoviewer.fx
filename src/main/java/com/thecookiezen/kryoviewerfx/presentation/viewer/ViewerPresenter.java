@@ -3,7 +3,7 @@ package com.thecookiezen.kryoviewerfx.presentation.viewer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.KryoWrapper;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaDeserializer;
 import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;

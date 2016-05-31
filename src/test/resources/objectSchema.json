@@ -1,0 +1,12 @@
+{
+  "name": "com.thecookiezen.TestObject",
+  "type": "object",
+  "properties": {
+      "field_a": {
+        "type": "boolean"
+      },
+      "field_b": {
+        "type": "string"
+      }
+    }
+}

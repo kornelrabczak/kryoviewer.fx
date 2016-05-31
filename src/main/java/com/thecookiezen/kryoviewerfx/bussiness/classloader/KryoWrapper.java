@@ -1,4 +1,4 @@
-package com.thecookiezen.kryoviewerfx.bussiness.schema;
+package com.thecookiezen.kryoviewerfx.bussiness.classloader;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;

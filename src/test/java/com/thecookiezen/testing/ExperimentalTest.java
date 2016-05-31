@@ -5,7 +5,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.google.common.collect.Lists;
 import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.KryoWrapper;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ArraySchema;
 
 import java.io.FileInputStream;

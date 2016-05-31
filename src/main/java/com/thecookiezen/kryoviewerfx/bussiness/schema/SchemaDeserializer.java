@@ -17,9 +17,9 @@ public class SchemaDeserializer {
     public RootSchema apply(String schema) {
         try {
             return mapper.readValue(schema, RootSchema.class);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("JSON schema deserialization failed for schema: " + schema + e);
-            throw new RuntimeException("JSON schema deserialization failed");
+            throw new IllegalStateException("JSON schema deserialization failed", e);
         }
     }
 }

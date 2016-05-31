@@ -3,7 +3,7 @@ package com.thecookiezen.kryoviewerfx.bussiness.classloader.generator;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 import com.google.common.collect.Lists;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.classloader.KryoWrapper;
 import com.thecookiezen.testing.User;
 import org.junit.Before;
 

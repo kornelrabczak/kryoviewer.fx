@@ -7,11 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SchemasTest {
+public class SchemasTypesTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -48,6 +47,21 @@ public class SchemasTest {
         assertThat(arraySchema.isArray()).isTrue();
         assertThat(((ArraySchema) arraySchema).getItemsSchema()).isInstanceOf(BooleanSchema.class);
         assertThat(arraySchema.getType()).isEqualTo(LinkedList.class);
+    }
+
+    @Test
+    public void deserializeObjectSchema() throws IOException {
+        ClassJsonSchema objectSchema = getSchema("objectSchema.json");
+
+        assertThat(objectSchema).isInstanceOf(RootSchema.class);
+        assertThat(objectSchema.isPrimitive()).isFalse();
+        assertThat(objectSchema.isArray()).isFalse();
+        assertThat(objectSchema).isInstanceOf(ObjectSchema.class);
+        assertThat(objectSchema.getType()).isEqualTo(Object.class);
+
+        assertThat(((ObjectSchema) objectSchema).getProperties()).containsKeys("field_a", "field_b");
+        assertThat(((ObjectSchema) objectSchema).getProperties().get("field_a").getType()).isEqualTo(boolean.class);
+        assertThat(((ObjectSchema) objectSchema).getProperties().get("field_b").getType()).isEqualTo(String.class);
     }
 
     private ClassJsonSchema getSchema(String fileName) throws IOException {
