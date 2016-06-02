@@ -1,7 +1,5 @@
-package com.thecookiezen.kryoviewerfx.bussiness.classloader.generator;
+package com.thecookiezen.kryoviewerfx.bussiness.classloader.loader;
 
-import com.thecookiezen.kryoviewerfx.bussiness.classloader.loader.Loadable;
-import com.thecookiezen.kryoviewerfx.bussiness.classloader.loader.ObjectLoader;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.BooleanSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.IntegerSchema;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ObjectSchema;
@@ -14,12 +12,12 @@ import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ObjectGeneratorTest {
+public class ObjectLoaderTest {
 
     Loadable<ObjectSchema> sut = new ObjectLoader();
 
     @Test
-    public void shouldGenerateSimpleType() {
+    public void shouldLoadSimpleType() {
         // given
         ObjectSchema schema = new ObjectSchema();
         schema.name = "TestClass";
@@ -28,16 +26,16 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_a", new BooleanSchema());
 
         // when
-        Class<?> generate = sut.loadFromSchema(schema);
+        Class<?> loaded = sut.loadFromSchema(schema);
 
         // then
-        Field[] fields = generate.getDeclaredFields();
+        Field[] fields = loaded.getDeclaredFields();
 
         assertThat(fields).are(new Condition<>((Predicate<Field>) o -> o.getType().equals(boolean.class), "boolean"));
     }
 
     @Test
-    public void shouldGenerateSimpleTypeWithBooleanIntegerAndStringFields() {
+    public void shouldLoadSimpleTypeWithBooleanIntegerAndStringFields() {
         // given
         ObjectSchema schema = new ObjectSchema();
         schema.name = "TestClass2";
@@ -48,10 +46,10 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_c", new StringSchema());
 
         // when
-        Class<?> generate = sut.loadFromSchema(schema);
+        Class<?> loaded = sut.loadFromSchema(schema);
 
         // then
-        Field[] fields = generate.getDeclaredFields();
+        Field[] fields = loaded.getDeclaredFields();
 
         assertThat(fields).areAtLeastOne(new Condition<>((Predicate<Field>) o -> o.getType().equals(boolean.class), "boolean"))
                 .areAtLeastOne(new Condition<>((Predicate<Field>) o -> o.getType().equals(String.class), "string"))
@@ -59,7 +57,7 @@ public class ObjectGeneratorTest {
     }
 
     @Test
-    public void shouldGenerateComplexTypeWithObjectBooleanIntegerAndStringFields() {
+    public void shouldLoadComplexTypeWithObjectBooleanIntegerAndStringFields() {
         // given
         ObjectSchema schema = new ObjectSchema();
         schema.name = "TestClass3";
@@ -76,13 +74,12 @@ public class ObjectGeneratorTest {
         schema.properties.put("field_x", schema2);
 
         // when
-        Class<?> generate = sut.loadFromSchema(schema);
+        Class<?> loaded = sut.loadFromSchema(schema);
 
         // then
-        Field[] fields = generate.getDeclaredFields();
+        Field[] fields = loaded.getDeclaredFields();
         assertThat(fields[0].getType().getDeclaredFields()).areAtLeastOne(new Condition<>((Predicate<Field>) o -> o.getType().equals(boolean.class), "boolean"))
                 .areAtLeastOne(new Condition<>((Predicate<Field>) o -> o.getType().equals(String.class), "string"))
                 .areAtLeastOne(new Condition<>((Predicate<Field>) o -> o.getType().equals(int.class), "int"));
     }
-
 }
