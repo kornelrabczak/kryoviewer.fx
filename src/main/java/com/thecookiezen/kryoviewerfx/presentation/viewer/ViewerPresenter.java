@@ -3,12 +3,9 @@ package com.thecookiezen.kryoviewerfx.presentation.viewer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.thecookiezen.kryoviewerfx.bussiness.classloader.KryoWrapper;
-import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaDeserializer;
 import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
+import com.thecookiezen.kryoviewerfx.bussiness.schema.SchemaDeserializer;
 import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,13 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Supplier;
@@ -48,8 +41,6 @@ public class ViewerPresenter implements Initializable {
     private ListView<String> schemas;
 
     private Map<String, Class<?>> schemasMap;
-
-    private final KryoWrapper kryoWrapper = new KryoWrapper();
 
     private final Supplier<Collection<File>> findFiles = () -> {
         File directory = new File("./target/classes/schemas");
@@ -78,29 +69,10 @@ public class ViewerPresenter implements Initializable {
 
     private List<TableColumn> getTableColumns(String schemaName) {
         Class<?> clazz = schemasMap.get(schemaName);
-        Field[] fields = clazz.getDeclaredFields();
-        List<TableColumn> tables = new ArrayList<>();
-        for (Field field : fields) {
-            logField(field);
-            TableColumn column = new TableColumn(field.getName());
-            column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>() {
-                @Override
-                public ObservableValue call(TableColumn.CellDataFeatures param) {
-                    try {
-                        return new ReadOnlyStringWrapper(String.valueOf(field.get(param.getValue())));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            });
-            tables.add(column);
+        if (clazz.equals(LinkedList.class)) {
+            return new ArrayTable().getColumns();
         }
-        return tables;
-    }
-
-    private PrintStream logField(Field field) {
-        return System.out.printf("%s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName());
+        return new ObjectTable(clazz).getColumns();
     }
 
     private String getPrettyPrint(String newValue) {
@@ -120,17 +92,14 @@ public class ViewerPresenter implements Initializable {
         if (selectedFile != null) {
             message.setText("File : " + selectedFile.getName());
 
-            String className = schemas.getSelectionModel().getSelectedItem();
-            Class<?> clazz = schemasMap.get(className);
-
-            Field[] fields = clazz.getDeclaredFields();
-            System.out.printf("%d fields:%n", fields.length);
-            final Object o = kryoWrapper.deserializeFromFile(selectedFile, clazz);
-            for (Field field : fields) {
-                System.out.printf("%s %s %s %s%n", Modifier.toString(field.getModifiers()), field.getType().getSimpleName(), field.getName(), field.get(o));
+            String schemaName = schemas.getSelectionModel().getSelectedItem();
+            Class<?> clazz = schemasMap.get(schemaName);
+            ObservableList<Object> data;
+            if (clazz.equals(LinkedList.class)) {
+                data = new ArrayTable().loadData(selectedFile);
+            } else {
+                data = new ObjectTable(clazz).loadData(selectedFile);
             }
-
-            final ObservableList data = FXCollections.observableArrayList(o);
             objectsTable.setItems(data);
         }
     }
