@@ -1,0 +1,15 @@
+{
+  "name":"com.thecookiezen.testing.User",
+  "type":"object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    }
+  }
+}

@@ -15,7 +15,7 @@
         </FlowPane>
         <Label fx:id="message" layoutX="135.0" layoutY="455.0" prefHeight="39.0" prefWidth="347.0"
                text="A simplest possible afterburner.fx application"/>
-        <Button layoutX="28.0" layoutY="461.0" mnemonicParsing="false" onAction="#launch" text="Launch"/>
+        <Button layoutX="28.0" layoutY="461.0" mnemonicParsing="false" onAction="#loadDataFromFile" text="Launch"/>
         <ListView fx:id="schemas" layoutX="28.0" layoutY="31.0" prefHeight="278.0" prefWidth="200.0"/>
         <TextArea fx:id="schemaView" layoutX="250.0" layoutY="31.0" prefHeight="429.0" prefWidth="321.0"/>
         <TableView fx:id="objectsTable" layoutX="16.0" layoutY="522.0" prefHeight="200.0" prefWidth="923.0"/>

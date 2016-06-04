@@ -1,6 +1,5 @@
 package com.thecookiezen.kryoviewerfx.bussiness.schema;
 
-import com.thecookiezen.kryoviewerfx.bussiness.classloader.ClassLoaderFactory;
 import org.junit.Test;
 
 import java.io.File;
@@ -22,12 +21,12 @@ public class SchemasTest {
         Supplier<Collection<File>> collectionSupplier = () -> Arrays.asList(getFile("arraySchema.json"), getFile("objectSchema.json"));
 
         // when
-        schemas = new Schemas(new SchemaDeserializer(), new ClassLoaderFactory(), collectionSupplier);
+        schemas = new Schemas(new SchemaDeserializer(), collectionSupplier);
 
         // then
-        assertThat(schemas.getSchemaName2ClassMap()).containsKeys("arraySchema", "objectSchema");
-        assertThat(schemas.getSchemaName2ClassMap().get("arraySchema")).isEqualTo(LinkedList.class);
-        assertThat(schemas.getSchemaName2ClassMap().get("objectSchema").getSimpleName()).isEqualTo("TestObject");
+        assertThat(schemas.getSchemas()).containsKeys("arraySchema", "objectSchema");
+        assertThat(schemas.getSchemas().get("arraySchema").getSchemaClass()).isEqualTo(LinkedList.class);
+        assertThat(schemas.getSchemas().get("objectSchema").getSchemaClass().getSimpleName()).isEqualTo("TestObject");
     }
 
     @Test(expected = IllegalStateException.class)
@@ -36,7 +35,7 @@ public class SchemasTest {
         Supplier<Collection<File>> collectionSupplier = () -> Arrays.asList(getFile("arraySchema.json"), getFile("booleanSchema.json"));
 
         // when & then
-        schemas = new Schemas(new SchemaDeserializer(), new ClassLoaderFactory(), collectionSupplier);
+        schemas = new Schemas(new SchemaDeserializer(), collectionSupplier);
     }
 
     private File getFile(String fileName) {

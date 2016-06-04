@@ -36,9 +36,9 @@ public class KryoWrapper {
         return this.kryos.get();
     }
 
-    public Object deserializeFromFile(File selectedFile, Class<?> clazz) throws FileNotFoundException {
+    public <T> T deserializeFromFile(File selectedFile, Class<T> clazz) throws FileNotFoundException {
         Input input = new Input(new FileInputStream(selectedFile));
-        final Object o = getKryo().readObject(input, clazz);
+        final T o = getKryo().readObject(input, clazz);
         input.close();
         System.out.println(o);
         return o;

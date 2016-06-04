@@ -13,6 +13,11 @@ public class ObjectLoader implements Loadable<ObjectSchema> {
 
     @Override
     public Class<?> loadFromSchema(ObjectSchema schema) {
+        try {
+            return Class.forName(schema.name);
+        } catch (ClassNotFoundException ignored) {
+        }
+
         DynamicType.Builder<Object> subclass = new ByteBuddy().subclass(Object.class).name(schema.name);
 
         for (Map.Entry<String, ClassJsonSchema> entry : schema.getProperties().entrySet()) {
