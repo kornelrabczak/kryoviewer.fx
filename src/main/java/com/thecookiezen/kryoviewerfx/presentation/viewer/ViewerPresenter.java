@@ -6,13 +6,9 @@ import com.thecookiezen.kryoviewerfx.bussiness.schema.Schemas;
 import com.thecookiezen.kryoviewerfx.presentation.drawable.DrawableFactory;
 import com.thecookiezen.kryoviewerfx.presentation.drawable.TableDrawable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
@@ -50,7 +46,8 @@ public class ViewerPresenter implements Initializable {
         File directory = new File("./target/classes/schemas");
         return listFiles(directory, new String[]{"json"}, true);
     };
-    private TableDrawable tableDrawable;
+
+    private DrawableFactory drawableFactory = new DrawableFactory();;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,20 +65,18 @@ public class ViewerPresenter implements Initializable {
         schemas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Schema schema = schemasMap.get(newValue);
             schemaView.setText(schema.getPrettyPrint());
-            tableDrawable = DrawableFactory.createDrawable(schema);
-            objectsTable.getColumns().setAll(tableDrawable.getColumns());
-            objectsTable.setItems(FXCollections.emptyObservableList());
         });
     }
 
-    public void loadDataFromFile() throws FileNotFoundException, IllegalAccessException {
+    public void drawDataInTableFromFile() throws FileNotFoundException, IllegalAccessException {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
+            String schemaName = schemas.getSelectionModel().getSelectedItem();
+            TableDrawable drawable = drawableFactory.createDrawable(schemasMap.get(schemaName));
+            drawable.draw(selectedFile, objectsTable);
             message.setText("File : " + selectedFile.getName());
-            ObservableList draw = tableDrawable.draw(selectedFile);
-            objectsTable.setItems(draw);
         }
     }
 }

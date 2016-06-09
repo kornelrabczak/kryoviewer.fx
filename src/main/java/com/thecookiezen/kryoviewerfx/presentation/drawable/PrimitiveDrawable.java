@@ -1,20 +1,21 @@
 package com.thecookiezen.kryoviewerfx.presentation.drawable;
 
-import com.thecookiezen.kryoviewerfx.bussiness.classloader.KryoWrapper;
+import com.thecookiezen.kryoviewerfx.bussiness.deserializer.ListProvider;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public class PrimitiveDrawable implements TableDrawable {
+public class PrimitiveDrawable extends TableDrawable {
 
-    private final KryoWrapper kryoWrapper = new KryoWrapper();
+    public PrimitiveDrawable() {
+        super(new ListProvider());
+    }
 
     @Override
     public List<TableColumn> getColumns() {
@@ -26,8 +27,7 @@ public class PrimitiveDrawable implements TableDrawable {
     }
 
     @Override
-    public ObservableList draw(File loadFrom) throws FileNotFoundException {
-        LinkedList list = kryoWrapper.deserializeFromFile(loadFrom, LinkedList.class);
-        return FXCollections.observableArrayList(list);
+    protected ObservableList getData(File selectedFile) throws FileNotFoundException {
+        return dataProvider.deserialize(selectedFile, Optional.empty());
     }
 }

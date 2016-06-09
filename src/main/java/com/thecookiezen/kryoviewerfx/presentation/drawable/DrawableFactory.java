@@ -5,19 +5,19 @@ import com.thecookiezen.kryoviewerfx.bussiness.schema.types.ArraySchema;
 
 public class DrawableFactory {
 
-    public static TableDrawable createDrawable(Schema schema) {
+    public TableDrawable createDrawable(Schema schema) {
         if (schema.getSchema().isArray()) {
-            if (((ArraySchema) schema.getSchema()).getItemsSchema().isPrimitive()) {
-                return new PrimitiveDrawable();
-            } else {
-                try {
-                    return new ArrayDrawable(schema);
-                } catch (ClassNotFoundException e) {
-                    throw new IllegalStateException("Class not found");
-                }
-            }
+            return createArrayDrawable((ArraySchema) schema.getSchema());
         } else {
             return new ObjectDrawable(schema.getSchemaClass());
+        }
+    }
+
+    private TableDrawable createArrayDrawable(ArraySchema schema) {
+        if (schema.isItemPrimitive()) {
+            return new PrimitiveDrawable();
+        } else {
+            return new ArrayDrawable(schema);
         }
     }
 }

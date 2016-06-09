@@ -1,5 +1,6 @@
 package com.thecookiezen.kryoviewerfx.bussiness.schema.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
@@ -31,5 +32,10 @@ public class ArraySchema extends RootSchema {
 
     public void setItemsSchema(ClassJsonSchema itemsSchema) {
         this.itemsSchema = itemsSchema;
+    }
+
+    @JsonIgnore
+    public boolean isItemPrimitive() {
+        return itemsSchema.isPrimitive();
     }
 }
